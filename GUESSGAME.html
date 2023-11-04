@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 400px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input {
+            width: 60px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 400px) {
+            #container {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Number Guessing Game</h1>
+        <p>Click "Start" to begin.</p>
+        <button id="startButton">Start</button>
+        <div id="gameDiv" style="display: none;">
+            <p>I'm thinking of a number between 1 and 100.</p>
+            <p>Enter your guess:</p>
+            <input type="number" id="userGuess" min="1" max="100">
+            <button id="submitGuess">Submit</button>
+            <p id="result"></p>
+            <p id="attempts"></p>
+        </div>
+        <button id="playAgain" style="display: none;">Play Again</button>
+    </div>
+
+    <script>
+        let random_number;
+        let attempts = 0;
+
+        document.getElementById("startButton").addEventListener("click", () => {
+            random_number = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            document.getElementById("startButton").disabled = true;
+            document.getElementById("gameDiv").style.display = "block";
+            document.getElementById("userGuess").value = "";
+        });
+
+        document.getElementById("submitGuess").addEventListener("click", () => {
+            const user_guess = parseInt(document.getElementById("userGuess").value);
+
+            if (!isNaN(user_guess)) {
+                attempts++;
+                if (user_guess < random_number) {
+                    document.getElementById("result").innerText = "Too low. Try again.";
+                } else if (user_guess > random_number) {
+                    document.getElementById("result").innerText = "Too high. Try again.";
+                } else {
+                    document.getElementById("result").innerText = `Congratulations! You've guessed the number (${random_number}) correctly!`;
+                    document.getElementById("attempts").innerText = `It took you ${attempts} attempts to win the game.`;
+                    document.getElementById("submitGuess").disabled = true;
+                    document.getElementById("playAgain").style.display = "block";
+                }
+            } else {
+                document.getElementById("result").innerText = "Invalid input. Please enter a valid number.";
+            }
+        });
+
+        document.getElementById("playAgain").addEventListener("click", () => {
+            document.getElementById("startButton").disabled = false;
+            document.getElementById("gameDiv").style.display = "none";
+            document.getElementById("submitGuess").disabled = false;
+            document.getElementById("playAgain").style.display = "none";
+        });
+    </script>
+</body>
+</html>
